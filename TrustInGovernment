@@ -1,0 +1,163 @@
+import React from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceArea } from 'recharts';
+
+const TrustInGovernmentChart = () => {
+  const data = [
+    { date: "1958", poll: 73, average: 73, president: "Eisenhower" },
+    { date: "1964", poll: 77, average: 77, president: "Johnson" },
+    { date: "1966", poll: 65, average: 65, president: "Johnson" },
+    { date: "1968", poll: 62, average: 62, president: "Johnson" },
+    { date: "1970", poll: 54, average: 54, president: "Nixon" },
+    { date: "1972", poll: 53, average: 53, president: "Nixon" },
+    { date: "1974", poll: 36, average: 36, president: "Nixon/Ford" },
+    { date: "1976", poll: 33, average: 36, president: "Ford" },
+    { date: "1978", poll: 29, average: 31, president: "Carter" },
+    { date: "1980", poll: 25, average: 30, president: "Carter" },
+    { date: "1982", poll: 33, average: 39, president: "Reagan" },
+    { date: "1984", poll: 44, average: 41, president: "Reagan" },
+    { date: "1986", poll: 39, average: 44, president: "Reagan" },
+    { date: "1988", poll: 41, average: 41, president: "Reagan" },
+    { date: "1990", poll: 28, average: 33, president: "H.W. Bush" },
+    { date: "1992", poll: 29, average: 25, president: "H.W. Bush" },
+    { date: "1994", poll: 22, average: 21, president: "Clinton" },
+    { date: "1996", poll: 33, average: 28, president: "Clinton" },
+    { date: "1998", poll: 26, average: 30, president: "Clinton" },
+    { date: "2000", poll: 44, average: 42, president: "Clinton" },
+    { date: "2002", poll: 55, average: 46, president: "W. Bush" },
+    { date: "2004", poll: 46, average: 39, president: "W. Bush" },
+    { date: "2006", poll: 34, average: 31, president: "W. Bush" },
+    { date: "2008", poll: 31, average: 24, president: "W. Bush" },
+    { date: "2010", poll: 25, average: 22, president: "Obama" },
+    { date: "2012", poll: 22, average: 19, president: "Obama" },
+    { date: "2014", poll: 24, average: 18, president: "Obama" },
+    { date: "2016", poll: 19, average: 18, president: "Obama" },
+    { date: "2018", poll: 17, average: 17, president: "Trump" },
+    { date: "2020", poll: 20, average: 24, president: "Trump" },
+    { date: "2022", poll: 20, average: 20, president: "Biden" },
+    { date: "2024", poll: 22, average: 22, president: "Biden" }
+  ];
+
+  const presidentialEras = [
+    { start: "1958", end: "1963", president: "Eisenhower", shade: "rgba(75, 75, 75, 0.1)" },
+    { start: "1963", end: "1969", president: "Johnson", shade: "rgba(100, 100, 100, 0.1)" },
+    { start: "1969", end: "1974", president: "Nixon", shade: "rgba(75, 75, 75, 0.1)" },
+    { start: "1974", end: "1977", president: "Ford", shade: "rgba(100, 100, 100, 0.1)" },
+    { start: "1977", end: "1981", president: "Carter", shade: "rgba(75, 75, 75, 0.1)" },
+    { start: "1981", end: "1989", president: "Reagan", shade: "rgba(100, 100, 100, 0.1)" },
+    { start: "1989", end: "1993", president: "H.W. Bush", shade: "rgba(75, 75, 75, 0.1)" },
+    { start: "1993", end: "2001", president: "Clinton", shade: "rgba(100, 100, 100, 0.1)" },
+    { start: "2001", end: "2009", president: "W. Bush", shade: "rgba(75, 75, 75, 0.1)" },
+    { start: "2009", end: "2017", president: "Obama", shade: "rgba(100, 100, 100, 0.1)" },
+    { start: "2017", end: "2021", president: "Trump", shade: "rgba(75, 75, 75, 0.1)" },
+    { start: "2021", end: "2024", president: "Biden", shade: "rgba(100, 100, 100, 0.1)" }
+  ];
+
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-black border border-gray-700 p-4 rounded-lg shadow-lg">
+          <p className="text-gray-200 font-bold">{label}</p>
+          <p className="text-gray-400">President: {payload[0]?.payload.president}</p>
+          {payload.map((entry, index) => (
+            <p key={index} style={{ color: entry.color }}>
+              {entry.name}: {entry.value}%
+            </p>
+          ))}
+        </div>
+      );
+    }
+    return null;
+  };
+
+  return (
+    <div className="w-full max-w-4xl" style={{ background: '#000000' }}>
+      <div className="p-6">
+        <h2 className="text-xl font-bold text-gray-100 mb-2">Public Trust in Government (1958-2024)</h2>
+        <p className="text-gray-400 mb-6">Percentage who say they trust the government to do what is right just about always/most of the time</p>
+        <div className="h-96">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart
+              data={data}
+              margin={{
+                top: 20,
+                right: 30,
+                left: 20,
+                bottom: 30,
+              }}
+              style={{ background: '#000000' }}
+            >
+              {presidentialEras.map((era, index) => (
+                <ReferenceArea
+                  key={index}
+                  x1={era.start}
+                  x2={era.end}
+                  fill={era.shade}
+                  fillOpacity={1}
+                  label={{
+                    value: era.president,
+                    position: 'top',
+                    fill: '#666666',
+                    fontSize: 10
+                  }}
+                />
+              ))}
+              <CartesianGrid 
+                strokeDasharray="3 3" 
+                stroke="#333333" 
+                vertical={false}
+              />
+              <XAxis 
+                dataKey="date"
+                angle={-45}
+                textAnchor="end"
+                height={60}
+                interval={"preserveStartEnd"}
+                tickMargin={15}
+                stroke="#666666"
+                tick={{ fill: '#888888' }}
+              />
+              <YAxis
+                domain={[0, 100]}
+                label={{ 
+                  value: 'Trust in Government (%)', 
+                  angle: -90, 
+                  position: 'insideLeft',
+                  style: { textAnchor: 'middle', fill: '#888888' }
+                }}
+                stroke="#666666"
+                tick={{ fill: '#888888' }}
+              />
+              <Tooltip content={<CustomTooltip />} />
+              <Legend 
+                wrapperStyle={{
+                  paddingTop: "20px",
+                  color: "#888888"
+                }}
+              />
+              <Line
+                type="monotone"
+                dataKey="poll"
+                name="Individual Polls"
+                stroke="#3b82f6"
+                strokeWidth={2}
+                dot={{ r: 4, fill: "#3b82f6" }}
+                activeDot={{ r: 8, fill: "#3b82f6" }}
+              />
+              <Line
+                type="monotone"
+                dataKey="average"
+                name="Moving Average"
+                stroke="#ef4444"
+                strokeWidth={2}
+                dot={{ r: 4, fill: "#ef4444" }}
+                activeDot={{ r: 8, fill: "#ef4444" }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default TrustInGovernmentChart;
